@@ -62,7 +62,7 @@ The **Minor Project** is the main required project component of the course.
 
 **Weight:** 14%
 
-* [Minor Project](./Minor%20Project/)
+* [Minor Project](./Minor_Project/)
 
 The minor project includes work completed during the semester as well as the final project report.
 
