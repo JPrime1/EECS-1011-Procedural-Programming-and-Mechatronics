@@ -75,7 +75,7 @@ The **Major Project** is an optional programming project intended for additional
 **Weight:** 18%
 **Status:** Optional
 
-* [Major Project](./Major%20Project/)
+* [Major Project](./Major_Project/)
 
 ---
 
@@ -83,7 +83,7 @@ The **Major Project** is an optional programming project intended for additional
 
 This section contains other coursework, experiments, examples, or smaller programming exercises that do not fall directly under an assignment, lab, or project.
 
-* [Additional Work](./Additional%20Work/)
+* [Additional Work](./Additional_Work/)
 
 ---
 
