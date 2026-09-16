@@ -5,9 +5,9 @@
 % a side of 7 units
 % a height of 5 units
 clc, clear
-base    = 12
-side    = 7
-height  = 5
+base    = 12;
+side    = 7;
+height  = 5;
 
 % Calculate the area and perimeter of the parallelogram
 area        = (base * height)
