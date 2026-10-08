@@ -29,7 +29,7 @@ for z = 0:max(vTable.Z)
 
     % Due to ordering problems, we need to sort the vertices with boundary points
     % Due to convex hull removing the inner points
-    k = boundary(xyVertices.X, xyVertices.Y);
+    k = boundary(xyVertices.X, xyVertices.Y,0.5);
     xyVertices = xyVertices(k, :);
 
     % Plot the vertices in the xy-plane
@@ -43,7 +43,7 @@ for y = 0:max(vTable.Y)
 
     % Due to ordering problems, we need to sort the vertices with boundary points
     % Due to convex hull removing the inner points
-    k = boundary(xzVertices.X, xzVertices.Z,0.49);
+    k = boundary(xzVertices.X, xzVertices.Z,0.5);
     xzVertices = xzVertices(k, :);
 
     % Plot the vertices in the xz-plane
@@ -57,7 +57,7 @@ for x = 0:max(vTable.X)
 
     % Due to ordering problems, we need to sort the vertices with boundary points
     % Due to convex hull removing the inner points
-    k = boundary(yzVertices.Y, yzVertices.Z,0.49);
+    k = boundary(yzVertices.Y, yzVertices.Z,0.5);
     yzVertices = yzVertices(k, :);
 
     % Plot the vertices in the yz-plane
