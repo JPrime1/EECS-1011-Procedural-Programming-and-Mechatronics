@@ -3,7 +3,7 @@
 % TA: Miodrag Tasic
 
 % Lab 5: Arduino Board Buzzing
-% Lab Goal: Getting familar with the Arduino board and its components.
+% Lab Goal: Getting familiar with the Arduino board and its components.
 %           Buzzing 5 times using the Arduino board's buzzer.
 % INPUT: No Input required from the user
 % OUTPUT: Buzzing sound from the Arduino board's buzzer
