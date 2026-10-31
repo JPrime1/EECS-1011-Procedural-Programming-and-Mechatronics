@@ -79,11 +79,11 @@ end
 
 % Encode nx14 matrix given a string
 function stringMatrix = encode(stringInput, alphabet)
-    word = char(stringInput);
+    input = char(stringInput);
     stringMatrix = [];
 
-    for index = 1:length(word)
-        morseVector = charToMorse(word[index], alphabet);
+    for index = 1:length(input)
+        morseVector = charToMorse(input[index], alphabet);
         stringMatrix = [stringMatrix, morseVector];
     end
 end
