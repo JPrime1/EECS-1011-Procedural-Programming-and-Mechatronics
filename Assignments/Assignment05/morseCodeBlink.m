@@ -85,7 +85,7 @@ function stringMatrix = encode(stringInput, alphabet)
 <<<<<<< HEAD
     for index = 1:length(input)
         morseVector = charToMorse(input[index], alphabet);
-        stringMatrix = [stringMatrix, morseVector];
+        stringMatrix = [stringMatrix; morseVector];
 =======
     for index = 1:length(word)
         morseVector = charToMorse(word(index), alphabet);
