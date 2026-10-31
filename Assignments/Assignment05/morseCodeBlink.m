@@ -4,9 +4,13 @@
 
 % Goal: To blink morse code of my initials with a LED connected to an Arduino board using MATLAB.
 % Procedure:
-%   1. Establish communication with the Arduino board.
-%   2. Create a 26x14 morse code matrix of the alphabet.
-%   3. Construct a function to extract from the alphabet with a prompted character.
+%   1. Divide Code into segments for Morse, Board, Main
+%   2. Create a static class for the morse encoding
+%       2.1 Create a 26x14 morse code matrix of the alphabet.
+%       2.2 Construct a function to extract from the alphabet with a prompted character.
+%   3. Create a board object class
+%       3.1 Establish constant values ex. ON OFF PAUSE BLINK TIMING
+%       3.2 Establish communication with the Arduino board.
 %   4. Call the function to blink the morse code of my initials.
 
 % Challenges:
@@ -17,12 +21,8 @@
 % Clear the workspace and command window
 clear; clc;
 
-% Connect to the Arduino board
-%a = arduino('COM19', 'Uno');
-
-% Define variables for LED control
-on = 1;     % LED ON state
-off = 0;    % LED OFF state
+% Construct and Connect to the Arduino board
+a = ArduinoBoard(arduino('COM19', 'Uno'));
 
 % Main Portion
 alphabet = MorseCode.createAlphabet();
@@ -90,5 +90,29 @@ classdef MorseCode
             morseVectorOutput = alphabet(index,:);
         end
 
+    end
+end
+
+classdef ArduinoBoard
+    properties
+        board;
+
+        % Timing Properties
+        timeUnit = 0.2; % seconds
+
+        % Define variables for LED control
+        on = 1;     % LED ON state
+        off = 0;    % LED OFF state
+
+    end
+
+    methods
+        % Constructor
+        function obj = ArduinoBoard(inputBoard)
+            % establish connection and hold value here
+            obj.board = inputBoard;            
+        end
+
+        % TODO: Transmit Function utilizing two functions blink and buzz
     end
 end
