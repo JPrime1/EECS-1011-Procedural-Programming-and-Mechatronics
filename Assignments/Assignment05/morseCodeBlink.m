@@ -85,7 +85,7 @@ classdef MorseCode
         end
 
         % Extract a morse vector given a requested char from a given alphabet
-        function charMorseVectorOutput = charToMorse(character, alphabet)
+        function morseVectorOutput = charToMorse(character, alphabet)
             index = upper(character) - 'A' + 1;
             morseVectorOutput = alphabet(index,:);
         end
