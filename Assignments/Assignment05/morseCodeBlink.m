@@ -26,7 +26,7 @@ clear; clc;
 % Main Portion
 % ========================================================================
 % Connect to the Arduino board
-a = arduino('COM19', 'Uno');
+% a = arduino('COM19', 'Uno');
 
 alphabet = createAlphabet();
 name = "James Prime";
@@ -82,9 +82,15 @@ function stringMatrix = encode(stringInput, alphabet)
     input = char(stringInput);
     stringMatrix = [];
 
+<<<<<<< HEAD
     for index = 1:length(input)
         morseVector = charToMorse(input[index], alphabet);
         stringMatrix = [stringMatrix, morseVector];
+=======
+    for index = 1:length(word)
+        morseVector = charToMorse(word(index), alphabet);
+        stringMatrix = [stringMatrix; morseVector];
+>>>>>>> a813be9e4bda42bc3c6b2993194167255a0ef278
     end
 end
 
@@ -102,6 +108,10 @@ end
 timeUnit = 0.2; % seconds
 on = 1;     % LED ON state
 off = 0;    % LED OFF state
-shortGap = NaN(1,14)(1:3)=0;
+shortGap = NaN(1,14);
+shortGap(1:3) = 0;
+longGap = NaN(1,14);
+longGap(1:6) = 0;
+
 
 % TODO: Transmit Function utilizing two functions blink and buzz
