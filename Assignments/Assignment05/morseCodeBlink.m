@@ -17,102 +17,91 @@
 %   1. Understanding how to establish communication with the Arduino board.
 %   2. Creating a morse code matrix of the alphabet.
 %   3. Managing the timing for the LED blinking sequence.
+%   4. Learning matlab doesn't like multiple class definitions within a single file.
 
 % Clear the workspace and command window
 clear; clc;
 
-% Construct and Connect to the Arduino board
-a = ArduinoBoard(arduino('COM19', 'Uno'));
-
+% ========================================================================
 % Main Portion
-alphabet = MorseCode.createAlphabet();
+% ========================================================================
+% Connect to the Arduino board
+a = arduino('COM19', 'Uno');
+
+alphabet = createAlphabet();
 name = "James Prime";
-morseMatrix = MorseCode.encode("JP", alphabet);
+morseMatrix = encode("JP", alphabet);
 
-classdef MorseCode
-    methods (Static)
-        % Construct and return alphabet
-        function alphabet = createAlphabet()
-            % Define the morse code string for each letter of the alphabet
-            morseCode   = [ ".-", "-...", "-.-.", "-..", ".", ...
-                            "..-.", "--.", "....", "..", ".---",...
-                            "-.-", ".-..", "--", "-.", "---", ...
-                            ".--.", "--.-", ".-.","...", "-",...
-                            "..-", "...-", ".--","-..-", "-.--","--.."];
+% ========================================================================
+% Morse Code Functions
+% ========================================================================
+% Construct and return alphabet
+function alphabet = createAlphabet()
+    % Define the morse code string for each letter of the alphabet
+    morseCode   = [ ".-", "-...", "-.-.", "-..", ".", ...
+                    "..-.", "--.", "....", "..", ".---",...
+                    "-.-", ".-..", "--", "-.", "---", ...
+                    ".--.", "--.-", ".-.","...", "-",...
+                    "..-", "...-", ".--","-..-", "-.--","--.."];
 
-            morseMatrixAlphabet = NaN(26,14); % "empty" NaN matrix
+    morseMatrixAlphabet = NaN(26,14); % "empty" NaN matrix
 
-            % Construct the morse matrix alphabet
-            for i = 1:26
-                letter = char(morseCode(i));    % extract string of morse, convert to char matrix
-                vectorPointer = 1;              % internal pointer when navigating a row within the NaN matrix
-                
-                for j = 1:length(letter)
-                    
-                    if letter(j) == '.'
-                        % Dot represented by 1
-                        morseMatrixAlphabet(i,vectorPointer) = 1; 
-                        vectorPointer = vectorPointer + 1;            
-                    elseif letter(j) == '-'
-                        % Dash represented by 111
-                        morseMatrixAlphabet(i,vectorPointer) = 1; 
-                        morseMatrixAlphabet(i,vectorPointer+1) = 1; 
-                        morseMatrixAlphabet(i,vectorPointer+2) = 1; 
-                        vectorPointer = vectorPointer + 3;
-                    end
-
-                    % Only seperate these dashes or dots if they're NOT at the end
-                    if j ~= length(letter)
-                        morseMatrixAlphabet(i,vectorPointer) = 0;
-                        vectorPointer = vectorPointer + 1;
-                    end
-                end
+    % Construct the morse matrix alphabet
+    for i = 1:26
+        letter = char(morseCode(i));    % extract string of morse, convert to char matrix
+        vectorPointer = 1;              % internal pointer when navigating a row within the NaN matrix
+        
+        for j = 1:length(letter)
+            
+            if letter(j) == '.'
+                % Dot represented by 1
+                morseMatrixAlphabet(i,vectorPointer) = 1; 
+                vectorPointer = vectorPointer + 1;            
+            elseif letter(j) == '-'
+                % Dash represented by 111
+                morseMatrixAlphabet(i,vectorPointer) = 1; 
+                morseMatrixAlphabet(i,vectorPointer+1) = 1; 
+                morseMatrixAlphabet(i,vectorPointer+2) = 1; 
+                vectorPointer = vectorPointer + 3;
             end
 
-            % return fully constructed alphabet
-            alphabet = morseMatrixAlphabet; 
-        end
-
-        % Encode nx14 matrix given a string
-        function stringMatrix = encode(stringInput, alphabet)
-            word = char(stringInput);
-            stringMatrix = [];
-
-            for index = 1:length(word)
-                morseVector = MorseCode.charToMorse(word[index], alphabet);
-                stringMatrix = [stringMatrix, morseVector];
+            % Only seperate these dashes or dots if they're NOT at the end
+            if j ~= length(letter)
+                morseMatrixAlphabet(i,vectorPointer) = 0;
+                vectorPointer = vectorPointer + 1;
             end
         end
+    end
 
-        % Extract a morse vector given a requested char from a given alphabet
-        function morseVectorOutput = charToMorse(character, alphabet)
-            index = upper(character) - 'A' + 1;
-            morseVectorOutput = alphabet(index,:);
-        end
+    % return fully constructed alphabet
+    alphabet = morseMatrixAlphabet; 
+end
 
+% Encode nx14 matrix given a string
+function stringMatrix = encode(stringInput, alphabet)
+    word = char(stringInput);
+    stringMatrix = [];
+
+    for index = 1:length(word)
+        morseVector = charToMorse(word[index], alphabet);
+        stringMatrix = [stringMatrix, morseVector];
     end
 end
 
-classdef ArduinoBoard
-    properties
-        board;
-
-        % Timing Properties
-        timeUnit = 0.2; % seconds
-
-        % Define variables for LED control
-        on = 1;     % LED ON state
-        off = 0;    % LED OFF state
-
-    end
-
-    methods
-        % Constructor
-        function obj = ArduinoBoard(inputBoard)
-            % establish connection and hold value here
-            obj.board = inputBoard;            
-        end
-
-        % TODO: Transmit Function utilizing two functions blink and buzz
-    end
+% Extract a morse vector given a requested char from a given alphabet
+function morseVectorOutput = charToMorse(character, alphabet)
+    index = upper(character) - 'A' + 1;
+    morseVectorOutput = alphabet(index,:);
 end
+
+% ========================================================================
+% Arduino Functions
+% ========================================================================
+
+% Properties
+timeUnit = 0.2; % seconds
+on = 1;     % LED ON state
+off = 0;    % LED OFF state
+shortGap = NaN(1,14)(1:3)=0;
+
+% TODO: Transmit Function utilizing two functions blink and buzz
