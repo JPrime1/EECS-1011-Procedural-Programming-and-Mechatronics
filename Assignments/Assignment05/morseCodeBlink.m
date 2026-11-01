@@ -33,6 +33,8 @@ name = "James Prime";
 morseMatrix = encode("JP", alphabet);
 emit(a, morseMatrix);
 
+
+
 % ========================================================================
 % Morse Code Functions
 % ========================================================================
@@ -66,7 +68,7 @@ function alphabet = createAlphabet()
                 vectorPointer = vectorPointer + 3;
             end
 
-            % Only seperate these dashes or dots if they're NOT at the end
+            % Only separate these dashes or dots if they're NOT at the end
             if j ~= length(letter)
                 morseMatrixAlphabet(i,vectorPointer) = 0;
                 vectorPointer = vectorPointer + 1;
@@ -127,15 +129,15 @@ function output = emit(board, morseMatrix)
 
     % insert shortgaps between each char in morseMatrix
     morseMatrixCopy = NaN(rowNum*2-1, colNum); %create new array with room for gaps
-    morseMatrixCopy(1:2:end, :)  = morseMatrix;
-    morseMatrixCopy(2:2:end, :)  = shortGap;
+    morseMatrixCopy(1:2:end, :) = morseMatrix;
+    morseMatrixCopy(2:2:end, :) = repmat(shortGap, rowNum-1, 1); % repeat short gaps
 
     % Go over every entry within matrix and emit signal given entry value
     for row = 1:size(morseMatrixCopy,1)
         for col = 1:size(morseMatrixCopy,2)
             entry = morseMatrixCopy(row,col);
-            if entry == NaN
-                continue;
+            if isnan(entry)
+                break;
             end
             
             % Emit signal
@@ -145,7 +147,7 @@ function output = emit(board, morseMatrix)
         end
     end
 
-    % make sure buzzer and light are off when emision is over
+    % make sure buzzer and light are off when emission is over
     blink(board, ledPin, 0);
     buzz(board, buzzPin, 0);
 
