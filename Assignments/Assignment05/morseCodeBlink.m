@@ -30,10 +30,20 @@ a = arduino('COM19', 'Uno');
 
 alphabet = createAlphabet();
 name = "James Prime";
-morseMatrix = encode("JP", alphabet);
+initials = "JP";
+
+% Display the full name and initials
+fprintf("Full Name: %s\n", name);
+fprintf("Initials: %s\n", initials);
+fprintf("Transmitting %s...\n", initials);
+
+% Create and Plot initials
+morseMatrix = encode(initials, alphabet);
+plotMorse(initials, morseMatrix);
+
+% Emit Signal and End Transmission
 emit(a, morseMatrix);
-
-
+fprintf("Transmission Complete.\n");
 
 % ========================================================================
 % Morse Code Functions
@@ -99,17 +109,19 @@ end
 % ========================================================================
 % Arduino Functions
 % ========================================================================
-
+% Blink a given LED and State
 function output = blink(board, ledPin, state)
     writeDigitalPin(board, ledPin, state);
     output = 1;
 end
 
+% Buzz a given buzzer and cycle rate
 function output = buzz(board, buzzerPin, cycle)
     writePWMDutyCycle(board, buzzerPin, cycle);
     output = 1;
 end
 
+% Perform morse code emission given a board and morse matrix
 function output = emit(board, morseMatrix)
     % Properties
     timeUnit = 0.2; % seconds
@@ -120,14 +132,14 @@ function output = emit(board, morseMatrix)
 
     shortGap = NaN(1,14);
     shortGap(1:3) = 0;
-    longGap = NaN(1,14);
-    longGap(1:6) = 0;
+    % longGap = NaN(1,14);
+    % longGap(1:6) = 0;
 
     % matrix dimensions
     rowNum = size(morseMatrix, 1);
     colNum = size(morseMatrix, 2);
 
-    % insert shortgaps between each char in morseMatrix
+    % insert shortgaps between each char in a copy of morseMatrix
     morseMatrixCopy = NaN(rowNum*2-1, colNum); %create new array with room for gaps
     morseMatrixCopy(1:2:end, :) = morseMatrix;
     morseMatrixCopy(2:2:end, :) = repmat(shortGap, rowNum-1, 1); % repeat short gaps
@@ -151,5 +163,48 @@ function output = emit(board, morseMatrix)
     blink(board, ledPin, 0);
     buzz(board, buzzPin, 0);
 
+    output = 1;
+end
+
+% ========================================================================
+% Plotting Functions
+% ========================================================================
+% Plot Bar Graph of a given morse matrix
+function output = plotMorse(stringInput, morseMatrix)
+    % properties
+    dit = 0.2; % seconds
+    signal = [];
+
+    % Construct signal for plotting
+    for i = 1:size(morseMatrix, 1)
+        % Get the current character, excluding NaN padding
+        charSignal = morseMatrix(i, :);
+        charSignal = charSignal(~isnan(charSignal));
+
+        % Append character to signal
+        signal = [signal, charSignal];
+
+        % Insert short gap between characters
+        if i < size(morseMatrix, 1)
+            signal = [signal, 0, 0, 0];
+        end
+    end
+
+    time = (0:length(signal)-1)*dit + dit/2;
+
+    % Plotting
+    figure;
+    bar(time, signal, 1, 'FaceColor', 'k', 'EdgeColor', 'none');
+
+
+    % Labeling
+    titleString = sprintf("Morse Code for %s", stringInput);
+    title(titleString);
+    xlabel('Time (s)');
+    xlim([0 length(signal)*dit]);
+    ylim([0 1]);
+    yticks([]);
+    box on;
+    
     output = 1;
 end
