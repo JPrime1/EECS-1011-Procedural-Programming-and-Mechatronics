@@ -26,11 +26,12 @@ clear; clc;
 % Main Portion
 % ========================================================================
 % Connect to the Arduino board
-% a = arduino('COM19', 'Uno');
+a = arduino('COM19', 'Uno');
 
 alphabet = createAlphabet();
 name = "James Prime";
 morseMatrix = encode("JP", alphabet);
+emit(a, morseMatrix);
 
 % ========================================================================
 % Morse Code Functions
@@ -97,14 +98,56 @@ end
 % Arduino Functions
 % ========================================================================
 
-% Properties
-timeUnit = 0.2; % seconds
-on = 1;     % LED ON state
-off = 0;    % LED OFF state
-shortGap = NaN(1,14);
-shortGap(1:3) = 0;
-longGap = NaN(1,14);
-longGap(1:6) = 0;
+function output = blink(board, ledPin, state)
+    writeDigitalPin(board, ledPin, state);
+    output = 1;
+end
 
+function output = buzz(board, buzzerPin, cycle)
+    writePWMDutyCycle(board, buzzerPin, cycle);
+    output = 1;
+end
 
-% TODO: Transmit Function utilizing two functions blink and buzz
+function output = emit(board, morseMatrix)
+    % Properties
+    timeUnit = 0.2; % seconds
+    lightOn = 1;
+    buzzOn = 0.5;
+    ledPin = 'D4';
+    buzzPin = 'D5';
+
+    shortGap = NaN(1,14);
+    shortGap(1:3) = 0;
+    longGap = NaN(1,14);
+    longGap(1:6) = 0;
+
+    % matrix dimensions
+    rowNum = size(morseMatrix, 1);
+    colNum = size(morseMatrix, 2);
+
+    % insert shortgaps between each char in morseMatrix
+    morseMatrixCopy = NaN(rowNum*2-1, colNum); %create new array with room for gaps
+    morseMatrixCopy(1:2:end, :)  = morseMatrix;
+    morseMatrixCopy(2:2:end, :)  = shortGap;
+
+    % Go over every entry within matrix and emit signal given entry value
+    for row = 1:size(morseMatrixCopy,1)
+        for col = 1:size(morseMatrixCopy,2)
+            entry = morseMatrixCopy(row,col);
+            if entry == NaN
+                continue;
+            end
+            
+            % Emit signal
+            blink(board, ledPin, entry*lightOn);
+            buzz(board, buzzPin, entry*buzzOn);
+            pause(timeUnit);
+        end
+    end
+
+    % make sure buzzer and light are off when emision is over
+    blink(board, ledPin, 0);
+    buzz(board, buzzPin, 0);
+
+    output = 1;
+end
