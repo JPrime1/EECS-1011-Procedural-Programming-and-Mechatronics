@@ -33,3 +33,25 @@ clear; clc;
 % ========================================================================
 % Connect to the Arduino board
 % a = arduino('COM19', 'Uno');
+
+% Setup variables
+max_samples = 1000; % Number of samples to record
+sound_sensor_pin = 'A2';
+
+% Setup data collection vectors
+sound_data = zeros(max_samples, 1); 
+time_data = zeros(max_samples, 1); 
+
+% data collect
+tic; % start timer
+for index = 1:max_samples
+    sound_data(index) = readVoltage(a, sound_sensor_pin);
+    time_data(index) = toc;
+end
+
+% plot data 1 - original sound data
+plot(time_data, sound_data, 'b-');
+xlabel('Elapsed Time (s)');
+ylabel('Sensor Voltage (V)');
+title('Part 1: Original Piano Signal');
+grid on;
