@@ -50,8 +50,33 @@ for index = 1:max_samples
 end
 
 % plot data 1 - original sound data
+figure;
+subplot(3,1,1);
 plot(time_data, sound_data, 'b-');
 xlabel('Elapsed Time (s)');
 ylabel('Sensor Voltage (V)');
 title('Part 1: Original Piano Signal');
+grid on;
+
+
+% window sizes for moving average filters
+window_size_5 = 5;
+window_size_10 = 10;
+
+new_data_5 = movmean(sound_data, window_size_5);
+new_data_10 = movmean(sound_data, window_size_10);
+
+% plot data 2 - original sound data and filtered data
+subplot(3,1,2);
+plot(time_data, new_data_5, 'b-');
+xlabel('Elapsed Time (s)');
+ylabel('Sensor Voltage (V)');
+title('Part 2: Filtered Signal (Window Size = 5)');
+grid on;
+
+subplot(3,1,3);
+plot(time_data, new_data_10, 'b-');
+xlabel('Elapsed Time (s)');
+ylabel('Sensor Voltage (V)');
+title('Part 2: Filtered Signal (Window Size = 10)');
 grid on;
