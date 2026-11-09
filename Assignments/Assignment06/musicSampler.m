@@ -26,17 +26,18 @@
 %      peaks or rapid changes in the music signal.
 
 % Clear the workspace and command window
-clear; clc;
+clc; close all; clear all;
 
-% ========================================================================
-% Main Portion
-% ========================================================================
 % Connect to the Arduino board
 % a = arduino('COM19', 'Uno');
+% sound_sensor_pin = 'A2';
+
+% ========================================================================
+% Part 1: Record and Plot Original Signal - NO ALTERATIONS
+% ========================================================================
 
 % Setup variables
 max_samples = 1000; % Number of samples to record
-sound_sensor_pin = 'A2';
 
 % Setup data collection vectors
 sound_data = zeros(max_samples, 1); 
@@ -51,31 +52,45 @@ end
 
 % plot data 1 - original sound data
 figure;
-subplot(3,1,1);
 plot(time_data, sound_data, 'b-');
 xlabel('Elapsed Time (s)');
 ylabel('Sensor Voltage (V)');
 title('Part 1: Original Piano Signal');
 grid on;
 
+% ========================================================================
+% Part 2: Record and Plot 30 second Signal - WITH ALTERATIONS
+% ========================================================================
+
+% SETUP DATA COLLECTION
+timeLimit = 30; % seconds
+newSoundData = [];
+newTimeData = [];
+
+% data collect
+tic; % start timer
+while toc < timeLimit
+    newSoundData(end+1) = readVoltage(a, sound_sensor_pin);
+    newTimeData(end+1) = toc;
+end
 
 % window sizes for moving average filters
 window_size_5 = 5;
 window_size_10 = 10;
+new_data_5 = movmean(newSoundData, window_size_5);
+new_data_10 = movmean(newSoundData, window_size_10);
 
-new_data_5 = movmean(sound_data, window_size_5);
-new_data_10 = movmean(sound_data, window_size_10);
-
-% plot data 2 - original sound data and filtered data
-subplot(3,1,2);
-plot(time_data, new_data_5, 'b-');
+% plot data 2 - filtered sound data
+figure;
+subplot(2,1,1);
+plot(newTimeData, new_data_5, 'b-');
 xlabel('Elapsed Time (s)');
 ylabel('Sensor Voltage (V)');
 title('Part 2: Filtered Signal (Window Size = 5)');
 grid on;
 
-subplot(3,1,3);
-plot(time_data, new_data_10, 'b-');
+subplot(2,1,2);
+plot(newTimeData, new_data_10, 'b-');
 xlabel('Elapsed Time (s)');
 ylabel('Sensor Voltage (V)');
 title('Part 2: Filtered Signal (Window Size = 10)');
