@@ -36,8 +36,8 @@
 clc; close all; clear all;
 
 % Connect to the Arduino board
-% a = arduino('COM19', 'Uno');
-% sound_sensor_pin = 'A2';
+a = arduino('COM19', 'Uno');
+sound_sensor_pin = 'A2';
 
 % ========================================================================
 % Part 1: Record and Plot Original Signal - NO ALTERATIONS
