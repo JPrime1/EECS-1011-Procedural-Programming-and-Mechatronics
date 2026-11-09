@@ -2,6 +2,13 @@
 % Student ID: 215028657
 % Assignment 6: Measure Music with your Arduino
 
+% AUDIO CREDIT
+% Track: Next Horizon (Electronic Cinematic) - 30 Seconds Edit
+% Artist: Databend
+% Source: https://pixabay.com/music/corporate-next-horizon-electronic-cinematic-30-seconds-edit-519916/
+% License: Pixabay Content License
+% Accessed: November 8, 2026
+
 % Goal: To record voltage readings from the sound of music using an Arduino
 %       and MATLAB, plot the recorded signal, and investigate how moving-average
 %       filters affect the signal.
@@ -36,12 +43,19 @@ clc; close all; clear all;
 % Part 1: Record and Plot Original Signal - NO ALTERATIONS
 % ========================================================================
 
+% pause program for user input
+input('Press Enter to start recording first audio file...');
+
 % Setup variables
 max_samples = 1000; % Number of samples to record
 
 % Setup data collection vectors
 sound_data = zeros(max_samples, 1); 
 time_data = zeros(max_samples, 1); 
+
+% play file
+[y, Fs] = audioread("EECS1011_Piano_single_note_four_times.mp3");
+sound(y, Fs);
 
 % data collect
 tic; % start timer
@@ -62,10 +76,17 @@ grid on;
 % Part 2: Record and Plot 30 second Signal - WITH ALTERATIONS
 % ========================================================================
 
+% pause program for user input
+input('Press Enter to start recording 30 seconds of music...');
+
 % SETUP DATA COLLECTION
 timeLimit = 30; % seconds
 newSoundData = [];
 newTimeData = [];
+
+% play 30s file
+[y, Fs] = audioread("next_horizon.mp3");
+sound(y, Fs);
 
 % data collect
 tic; % start timer
