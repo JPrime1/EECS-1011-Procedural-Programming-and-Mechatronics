@@ -43,9 +43,6 @@ sound_sensor_pin = 'A2';
 % Part 1: Record and Plot Original Signal - NO ALTERATIONS
 % ========================================================================
 
-% pause program for user input
-input('Press Enter to start recording first audio file...');
-
 % Setup variables
 max_samples = 1000; % Number of samples to record
 
@@ -55,6 +52,8 @@ time_data = zeros(max_samples, 1);
 
 % play file
 [y, Fs] = audioread("EECS1011_Piano_single_note_four_times.mp3");
+% pause program for user input
+input('Press Enter to start recording first audio file...');
 sound(y, Fs);
 
 % data collect
@@ -62,6 +61,9 @@ tic; % start timer
 for index = 1:max_samples
     sound_data(index) = readVoltage(a, sound_sensor_pin);
     time_data(index) = toc;
+    if mod(index,100)==0
+        fprintf("Sampling %d out of %d\n",index,max_samples);
+    end
 end
 
 % plot data 1 - original sound data
@@ -76,9 +78,6 @@ grid on;
 % Part 2: Record and Plot 30 second Signal - WITH ALTERATIONS
 % ========================================================================
 
-% pause program for user input
-input('Press Enter to start recording 30 seconds of music...');
-
 % SETUP DATA COLLECTION
 timeLimit = 30; % seconds
 newSoundData = [];
@@ -86,6 +85,8 @@ newTimeData = [];
 
 % play 30s file
 [y, Fs] = audioread("next_horizon.mp3");
+% pause program for user input
+input('Press Enter to start recording 30 seconds of music...');
 sound(y, Fs);
 
 % data collect
@@ -101,7 +102,23 @@ window_size_10 = 10;
 new_data_5 = movmean(newSoundData, window_size_5);
 new_data_10 = movmean(newSoundData, window_size_10);
 
-% plot data 2 - filtered sound data
+% plot data 2 - original and filtered sound data
+figure;
+subplot(2,1,1);
+plot(newTimeData, newSoundData, 'b-');
+xlabel('Elapsed Time (s)');
+ylabel('Sensor Voltage (V)');
+title('Part 2: Original Signal');
+grid on;
+
+subplot(2,1,2);
+plot(newTimeData, new_data_5, 'b-');
+xlabel('Elapsed Time (s)');
+ylabel('Sensor Voltage (V)');
+title('Part 2: Filtered Signal (Window Size = 5)');
+grid on;
+
+% plot data 3 - comparing filtered signals with different window sizes
 figure;
 subplot(2,1,1);
 plot(newTimeData, new_data_5, 'b-');
