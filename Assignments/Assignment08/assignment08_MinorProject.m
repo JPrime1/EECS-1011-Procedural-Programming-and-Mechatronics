@@ -50,7 +50,7 @@ buzzGap = 0.2;                  % Gap between buzzes (seconds)
 pauseBeforeWatering = 2;        % Pause before activating pump
 pumpDuration = 1;               % Pump activation duration
 pauseAfterWatering = 10;        % Allow water to reach the soil
-% checkInterval = 600;            % Time between moisture checks
+checkInterval = 100;            % Time between moisture checks
 
 % Initialize pump to OFF state in case it was left ON from a previous run
 writeDigitalPin(a, pumpPin, 0);
