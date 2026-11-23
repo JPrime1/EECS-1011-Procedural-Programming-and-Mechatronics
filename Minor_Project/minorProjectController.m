@@ -1,4 +1,3 @@
-```matlab
 % Name: James Prime
 % Student ID: 215028657
 % Assignment: Plant Watering System
@@ -44,8 +43,8 @@ pumpPin = 'D6';
 moistureBeforeVoltage = 0;
 moistureAfterVoltage = 0;
 
-% TEMPORARY VALUES - CHANGE AFTER SENSOR CALIBRATION
-moistureThreshold = 2.0;        % Voltage threshold (V)
+% Define moisture threshold for watering, set to 3.0 V due to not wanting fully saturated soil
+moistureThreshold = 3.0;        % Voltage threshold (V)
 
 % Define timing properties
 buzzFrequency = 2000;           % Frequency (Hz)
@@ -55,7 +54,7 @@ buzzGap = 0.2;                  % Gap between buzzes (seconds)
 pauseBeforeWatering = 2;        % Pause before activating pump
 pumpDuration = 1;               % Pump activation duration
 pauseAfterWatering = 10;        % Allow water to reach the soil
-checkInterval = 60;             % Time between moisture checks
+checkInterval = 600;             % Time between moisture checks
 
 % Initialize pump to OFF state in case it was left ON from a previous run
 writeDigitalPin(a, pumpPin, 0);
@@ -63,7 +62,6 @@ writeDigitalPin(a, pumpPin, 0);
 % Display instructions
 fprintf("PLANT WATERING SYSTEM\n");
 fprintf("========================================\n");
-
 fprintf("WARNING:\n");
 fprintf("The program will continuously repeat the watering cycle.\n");
 fprintf("During the waiting period, press the ENTER key in the wait window\n");
