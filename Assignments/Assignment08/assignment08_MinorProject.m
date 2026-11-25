@@ -33,7 +33,7 @@ a = arduino('COM19', 'Uno');
 % Define pins
 moisturePin = 'A1';
 buzzerPin = 'D5';
-pumpPin = 'D6';
+pumpPin = 'D3';
 
 % Define voltage properties
 moistureBeforeVoltage = 0;
@@ -43,7 +43,7 @@ moistureAfterVoltage = 0;
 % moistureThreshold = 3.0;        % Voltage threshold (V)
 
 % Define timing properties
-buzzFrequency = 2000;           % Frequency (Hz)
+buzzFrequency = 0.5;            
 buzzDuration = 0.5;             % Buzzer ON duration (seconds)
 buzzGap = 0.2;                  % Gap between buzzes (seconds)
 
