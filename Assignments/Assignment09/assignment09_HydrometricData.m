@@ -41,7 +41,13 @@ baseUrl = 'https://dd.weather.gc.ca/today/hydrometric/csv/';
 frequency = 'daily';
 fileType = 'csv';
 
+% Load data necessary from each station and extracting from stationIds
+stationURL = 'https://dd.weather.gc.ca/today/hydrometric/doc/hydrometric_StationList.csv';
+webStationData = webread(stationURL);
+stations = webStationData(ismember(webStationData.ID, stationIds), :);
+
 % Initialize variables for storing hydrometric data
+hydrometricData = [];
 
 % Initialize variables for storing mean and standard deviation values
 
@@ -100,3 +106,19 @@ fileType = 'csv';
 % Plot standard deviation region
 
 % Add plot labels, legend, and title
+
+% ========================================================================
+% Data Collection Functions
+% ========================================================================
+function hydrometricData = collectStationData(stationId, baseUrl, frequency, fileType)
+    
+end
+
+function [meanValue, stdValue] = analyzeStationData(data)
+    meanValue = mean(data);
+    stdValue = std(data);
+end
+
+function cleanData = removeInvalidData(data)
+    cleanData = data(~isnan(data));
+end
